@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, FlatList } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { router, Stack, useLocalSearchParams } from 'expo-router'
 import Arrow from '@expo/vector-icons/MaterialCommunityIcons'
 import Input from '@/component/Input'
@@ -10,25 +10,29 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 // import WS from 'react-native-websocket'
 
 const UserRoom = () => {
-  const [serverState, setServerState] = React.useState('Loading...');
-  const [messageText, setMessageText] = React.useState('');
-  const [disableButton, setDisableButton] = React.useState(true);
-  const [inputFieldEmpty, setInputFieldEmpty] = React.useState(true);
-  const [serverMessages, setServerMessages] = React.useState([]);
-  const [user, setUserName] = React.useState('');
-  const [currentUser, setCurrentUserName] = React.useState('');
+  const [serverState, setServerState] = useState('Loading...');
+  const [messageText, setMessageText] = useState('');
+  const [disableButton, setDisableButton] = useState(true);
+  const [inputFieldEmpty, setInputFieldEmpty] = useState(true);
+  const [serverMessages, setServerMessages] = useState([]);
+  const [roomID, setRoomId] = useState('');
+  const [user, setUserName] = useState('');
+  const [userName, setMessageUserName] = useState('')
+  const [currentUser, setCurrentUserName] = useState('');
   const { room_id, name } = useLocalSearchParams<{ room_id: string, name: string }>();
 
+  const baseURL = 'https://chat-api-k4vi.onrender.com'
+
   const getUser = async () => {
-    const res = await fetch(`https://chat-api-k4vi.onrender.com/chat/rooms/${room_id}`)
+    const res = await fetch(`${baseURL}/chat/rooms/${room_id}`)
     const user = await res.json();
-    console.log('user....', user)
     setUserName(user.name);
+    setRoomId(user.id)
+    // console.log('api....user', user.id)
   }
   const getRoomsMessages = async () => {
-    const res = await fetch(`https://chat-api-k4vi.onrender.com/chat/rooms/${room_id}/messages`)
+    const res = await fetch(`${baseURL}/chat/rooms/${room_id}/messages`)
     const messages = await res.json();
-    // console.log('messages....', messages)
     setServerMessages(messages);
   }
   const getCurrentUser = async () => {
@@ -36,7 +40,7 @@ const UserRoom = () => {
     if (userName !== null) {
       const user = JSON.parse(userName)
       setCurrentUserName(user)
-      console.log('user....', user.user)
+      console.log('currentuser....', user.user)
     }
   }
   useEffect(() => {
@@ -45,7 +49,8 @@ const UserRoom = () => {
     getCurrentUser();
   }, [])
 
-  // const ws = React.useRef(new WebSocket(`ws://chat-api-k4vi.onrender.com/ws/{roomID}/{username}`)).current;
+  // const ws = React.useRef(new WebSocket(`ws://chat-api-k4vi.onrender.com/ws/${roomID}/${currentUser}`)).current;
+  const ws = new WebSocket(`ws://chat-api-k4vi.onrender.com/ws/${roomID}/${currentUser}`)
   // useEffect(() => {
   //   const serverMessagesList: any = [];
   //   ws.onopen = () => {
@@ -69,21 +74,7 @@ const UserRoom = () => {
   //   setMessageText('')
   //   setInputFieldEmpty(true)
   // }
-  // useEffect(() => {
-  //   ws.onopen = () => {
-  //     setServerState('Connected to the server')
-  //     setDisableButton(false);
-  //     // };
-  //     ws.onclose = (e) => {
-  //       setServerState('Disconnected. Check internet or server.')
-  //       setDisableButton(true);
-  //       // };
-  //       ws.onerror = (e) => {
-  //         // setServerState(e.message);
-  //       };
-  //     };
-  //   }
-  // }, []);
+
   return (
 
     <View style={styles.container}>
@@ -131,7 +122,7 @@ const UserRoom = () => {
 
 const MessageList = ({ item, index, currentUser }: any) => {
   if (item.username !== currentUser) {
-    console.log('username.....', item.username)
+    // console.log('username.....', item.username)
     return (
       <View style={{ padding: wp(3), }}>
         <View style={{ flexDirection: 'row' }}>

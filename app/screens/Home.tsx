@@ -14,7 +14,6 @@ const Home = () => {
         const res = await fetch('https://chat-api-k4vi.onrender.com/chat/rooms')
         setIsLoading(false)
         const rooms = await res.json();
-        console.log('rooms....', rooms)
         setData(rooms)
     }
     useEffect(() => {
@@ -50,7 +49,6 @@ const Home = () => {
 export default Home
 
 const RoomCards = ({ item, index }: any) => {
-    // console.log('item...name', item.id)
     return (
         <TouchableOpacity style={{
             padding: wp('3%'),
