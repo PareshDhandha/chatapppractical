@@ -5,7 +5,7 @@ import { router } from 'expo-router'
 const index = () => {
 
   useEffect(() => {
-    setTimeout(() => { router.push('/auth/Login') }, 3000)
+    setTimeout(() => { router.replace('/auth/Login') }, 3000)
   }, [])
   return (
     <View style={styles.container}>

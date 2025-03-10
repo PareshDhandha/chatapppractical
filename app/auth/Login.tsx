@@ -6,6 +6,7 @@ import "react-native-get-random-values";
 import Input from '@/component/Input';
 import Button from '@/component/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 const Login = () => {
     let uuid = uuidv4();
@@ -24,7 +25,7 @@ const Login = () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    user_id: crypto.randomUUID(),
+                    // user_id: crypto.randomUUID(),
                     username: userName,
                 })
             })
@@ -46,7 +47,7 @@ const Login = () => {
             <Text
                 style={{
                     marginTop: '40%',
-                    fontSize: 24,
+                    fontSize: wp('8%'),
                     fontWeight: '600',
                     textAlign: 'center'
                 }}
@@ -57,25 +58,25 @@ const Login = () => {
                 placeholder='Enter name'
                 onChangeText={(value) => setUserName(value)}
                 inputStyle={{
-                    marginTop: 50,
-                    padding: 10,
+                    marginTop: hp('7%'),
+                    padding: wp('3%'),
                     borderWidth: 1,
                     borderColor: '#ccc',
-                    borderRadius: 10,
-                    paddingLeft: 10
+                    borderRadius: wp('4%'),
+                    paddingLeft: wp('4%')
                 }}
             />
             <Text style={{ color: 'red' }}>{errorMessage}</Text>
             {
-                isLoading ? <ActivityIndicator size={'large'} style={{ marginTop: 20 }} /> :
+                isLoading ? <ActivityIndicator size={'large'} style={{ marginTop: hp(2) }} /> :
                     <Button
                         title='Sign Up'
                         style={{
-                            marginTop: 40,
-                            padding: 10,
+                            marginTop: hp(2),
+                            padding: wp(3),
                             backgroundColor: 'gray',
-                            borderRadius: 10,
-                            width: 200,
+                            borderRadius: wp(3),
+                            width: wp(50),
                             alignSelf: 'center'
                         }}
                         onPress={addUsername}
