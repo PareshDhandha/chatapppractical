@@ -50,7 +50,7 @@ const UserRoom = () => {
   }, [])
 
   // const ws = React.useRef(new WebSocket(`ws://chat-api-k4vi.onrender.com/ws/${roomID}/${currentUser}`)).current;
-  const ws = new WebSocket(`ws://chat-api-k4vi.onrender.com/ws/${roomID}/${currentUser}`)
+  // const ws = new WebSocket(`ws://chat-api-k4vi.onrender.com/ws/${roomID}/${currentUser}`)
   // useEffect(() => {
   //   const serverMessagesList: any = [];
   //   ws.onopen = () => {
@@ -141,10 +141,10 @@ const MessageList = ({ item, index, currentUser }: any) => {
             style={{
               marginLeft: wp(2),
               fontSize: wp(3),
-              alignSelf: 'center'
+              alignSelf: 'flex-end'
             }}
           >
-            ( {item.username} )
+            {item.username}
           </Text>
         </View>
       </View>
